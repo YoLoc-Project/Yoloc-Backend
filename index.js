@@ -14,8 +14,8 @@ const User = require('./models/userModel');
 const dotenv = require('dotenv').config().parsed;
 // console.log(dotenv);
 
-const mongoAtlasUrl = 'mongodb+srv://Blue2239:vfberPsmeGjwRf7c@yoloc-cluster.0anxhnn.mongodb.net/YoLoc-Cluster?retryWrites=true&w=majority'
-mongoose.connect(mongoAtlasUrl)
+const mongoAtlasUrl = dotenv.MONGODB_URL;
+mongoose.connect(mongoAtlasUrl);
 
 app.use(cors())
 app.use(bodyParser.urlencoded({extended:true}))
