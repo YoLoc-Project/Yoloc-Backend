@@ -23,6 +23,7 @@ const newSchema = new Schema({
             type: mongoose.Schema.Types.String,
         }
     ],
+    token : String,
 })
 
 newSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
