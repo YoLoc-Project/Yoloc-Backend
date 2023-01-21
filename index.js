@@ -57,6 +57,7 @@ app.use(async function(req,res,next){
 });
 
 app.use('/user', require('./routes/userRoute'));
+app.use('/profile', require('./routes/profileRoute'));
 app.use('/token', require('./routes/tokenRoute'));
 
 passport.serializeUser(User.serializeUser());

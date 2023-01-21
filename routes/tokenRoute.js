@@ -23,6 +23,7 @@ router.get('/auth', MID.checkToken, (req,res) => {
             name: foundUser.name,
             nickname: foundUser.nickname,
             phone: foundUser.phone,
+            birthdate: foundUser.birthdate,
             gender: foundUser.gender,
             faceImgs: foundUser.faceImgs,
         }

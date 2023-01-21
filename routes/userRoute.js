@@ -60,13 +60,14 @@ router.post('/signin', MID.lowercaseEmail, (req,res,next) => {
                             name: updatedUser.name,
                             nickname: updatedUser.nickname,
                             phone: updatedUser.phone,
+                            birthdate: updatedUser.birthdate,
                             gender: updatedUser.gender,
                             faceImgs: updatedUser.faceImgs,
                         }
 
                         return res.status(200).json({"token" : token, "user": userObject});
                     } else {
-                        return res.status(404).json({success: false, msg: 'User not found while attempting to update'});
+                        return res.status(404).json({success: false, message: 'User not found while attempting to update'});
                     }
                 })
 
@@ -76,6 +77,18 @@ router.post('/signin', MID.lowercaseEmail, (req,res,next) => {
             return res.status(401).json(info);
         }
     })(req, res, next)
+})
+
+router.post('/signout', MID.checkToken, (req,res) => {
+    var user = FUNC.getUser(req);
+    User.findByIdAndUpdate(user._id, { token: "" }, function(err, updatedUser) {
+        if (err) return console.log(err)
+        if (updatedUser) {
+            return res.status(200).json({"token" : token});
+        } else {
+            return res.status(404).json({success: false, message: 'User not found while attempting to logout'});
+        }
+    })
 })
 
 module.exports = router;

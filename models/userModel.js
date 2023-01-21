@@ -13,6 +13,7 @@ const newSchema = new Schema({
     },
     nickname: { type: String, default: 'Undefined' },
     phone : { type: String, default: '' },
+    birthdate : Date,
     gender : {
         type: String,
         enum : ['male','female'],
