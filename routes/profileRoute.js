@@ -2,6 +2,7 @@ const express  = require('express');
 const User = require('../models/userModel');
 const jwt = require('jwt-simple');
 const MID = require('../middlewares');
+const FUNC = require('../functions');
 const dotenv = require('dotenv').config().parsed;
 
 const router = express.Router();
