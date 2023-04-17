@@ -14,6 +14,12 @@ const User = require('./models/userModel');
 const dotenv = require('dotenv').config().parsed;
 // console.log(dotenv);
 
+// ---- [FLASK SOCKETIO CONNECTION TEST] ----
+// const http = require('http');
+// const server = http.createServer(app);
+// const { Server } = require("socket.io");
+// const io = new Server(server);
+
 const mongoAtlasUrl = dotenv.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
 
@@ -72,5 +78,30 @@ app.use(function(req,res,next) {
 });
 
 app.listen(port, () => {
-    console.log('port running on port : ' + port)
+    console.log('port running on port : ' + port);
 });
+
+// ---- [FLASK SOCKETIO CONNECTION TEST] ----
+// const http = require('http');
+// const server = http.createServer(app);
+// const { Server } = require("socket.io");
+// const io = new Server(server);
+
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+
+//   socket.on("disconnect", ()=> {
+//     console.log('a user disconnected');
+//   })
+
+//   socket.on('test message', function(msg) {
+//     console.log('msg: ' + msg);
+//     io.emit('msg back', msg);
+//   });
+// });
+
+// app.io = io;
+
+// server.listen(3000, () => {
+//   console.log('server listening on port : ' + port);
+// });
