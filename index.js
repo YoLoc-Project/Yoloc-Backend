@@ -1,8 +1,8 @@
 const express = require('express');
 const config = require('./config');
 const port = config.serverPort;
+const ioport = config.socketIOPort;
 const app = express();
-const host = '0.0.0.0';
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -15,10 +15,9 @@ const dotenv = require('dotenv').config().parsed;
 // console.log(dotenv);
 
 // ---- [FLASK SOCKETIO CONNECTION TEST] ----
-// const http = require('http');
-// const server = http.createServer(app);
-// const { Server } = require("socket.io");
-// const io = new Server(server);
+const http = require('http');
+const server = http.createServer(app);
+const { SocketServer } = require("socket.io");
 
 const mongoAtlasUrl = dotenv.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
@@ -77,9 +76,9 @@ app.use(function(req,res,next) {
   next();
 });
 
-app.listen(port, () => {
-    console.log('port running on port : ' + port);
-});
+// app.listen(port, () => {
+//     console.log('port running on port : ' + port);
+// });
 
 // ---- [FLASK SOCKETIO CONNECTION TEST] ----
 // const http = require('http');
@@ -87,21 +86,26 @@ app.listen(port, () => {
 // const { Server } = require("socket.io");
 // const io = new Server(server);
 
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
+server.listen(port, () => {
+  console.log('server listening on port : ' + port);
+});
 
-//   socket.on("disconnect", ()=> {
-//     console.log('a user disconnected');
-//   })
+var io = require('socket.io')(server);
 
-//   socket.on('test message', function(msg) {
-//     console.log('msg: ' + msg);
-//     io.emit('msg back', msg);
-//   });
+// io.listen(ioport, () => {
+//   console.log('Socket.IO listening on port : ' + ioport);
 // });
 
-// app.io = io;
+io.on('connection', (socket) => {
+  console.log('io connected');
 
-// server.listen(3000, () => {
-//   console.log('server listening on port : ' + port);
-// });
+  socket.on("disconnect", ()=> {
+    console.log('io disconnected');
+  })
+
+  socket.on('test message', function(msg) {
+    console.log('msg: ' + msg);
+    io.emit('msg back', msg);
+  });
+});
+app.io = io;
