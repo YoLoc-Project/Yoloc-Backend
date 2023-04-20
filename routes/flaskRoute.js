@@ -28,23 +28,27 @@ router.get('/test', function(req, res) {
 router.post('/trainmodel', function(req, res) {
   console.log("train model");
 
+  const example = {
+    images: [
+      {
+        url: 'example.com',
+        email: 'example@email.com',
+        name: 'Name'
+      },
+      {
+        url: 'example2.com',
+        email: 'example2@email.com',
+        name: 'Name2'
+      },
+    ],
+  }
+
   const options = {
     uri: 'http://127.0.0.1:5000/flask/trainmodel',
     method: 'POST',
-    json: {
-      images: [
-        {
-          url: 'example.com',
-          email: 'example@email.com',
-          name: 'Name'
-        },
-        {
-          url: 'example2.com',
-          email: 'example2@email.com',
-          name: 'Name2'
-        },
-      ],
-    },
+    headers: {'Content-Type': 'application/json'},
+    
+    json: JSON.stringify(example)
   };
 
   // Placeholder slot for updating database
