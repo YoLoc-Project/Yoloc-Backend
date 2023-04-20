@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const jwt = require('jwt-simple');
 const MID = require('../middlewares');
 const FUNC = require('../functions');
+const fetch = require('cross-fetch');
 const request = require('request');
 const dotenv = require('dotenv').config().parsed;
 
@@ -12,9 +13,11 @@ router.get('/getme', function(req, res) {
     res.status(200).send({
       example: "true"
     });
+
 });
 
 router.get('/test', function(req, res) {
+
   console.log("test");
     request.get('http://127.0.0.1:5000/flask/test', function (error, response, body) {
         console.error('error:', error);
@@ -22,8 +25,17 @@ router.get('/test', function(req, res) {
         console.log('body:', body);
         res.send(body);
       });  
-   return false;    
+      
 });
+
+// router.post('/test', function(req, res) {
+//   fetch('http://127.0.0.1:5000/flask/test', {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json'},
+//     body: JSON.stringify({target: 'one'})
+// });
+// });
+
 
 router.post('/trainmodel', function(req, res) {
   console.log("train model");
@@ -47,18 +59,18 @@ router.post('/trainmodel', function(req, res) {
     uri: 'http://127.0.0.1:5000/flask/trainmodel',
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    
     json: JSON.stringify(example)
   };
 
   // Placeholder slot for updating database
   // TODO Get all firebase image urls
+
     request(options, function (error, response, body) {
-        console.error('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-        console.log('body:', body);
-        res.send(body);
-      });  
+      console.error('error:', error);
+      console.log('statusCode:', response && response.statusCode);
+      console.log('body:', body);
+      res.send(body);
+    }); 
    return false;    
 });
 
