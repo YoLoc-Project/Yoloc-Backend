@@ -1,7 +1,6 @@
 const express = require('express');
 const config = require('./config');
 const port = config.serverPort;
-const ioport = config.socketIOPort;
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -54,7 +53,6 @@ passport.use(new LocalStrategy({
   },
   User.authenticate()
 ));
-
 app.use(async function(req,res,next){
   res.locals.message = req.user;
   console.log(res.locals)

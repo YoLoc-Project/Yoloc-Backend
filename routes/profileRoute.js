@@ -24,6 +24,7 @@ router.post('/addimage', MID.checkToken, (req,res) => {
          function(err, updatedUser) {
         if (err) return console.log(err)
         if (updatedUser) {
+            // TODO paste the flaskRoute /trainmodel code
             return res.status(200).json({success: true, message: 'Successfully added profile and images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
@@ -42,6 +43,7 @@ router.post('/editimage', MID.checkToken, (req,res) => {
          function(err, updatedUser) {
         if (err) return console.log(err)
         if (updatedUser) {
+            // TODO paste the flaskRoute /trainmodel code
             return res.status(200).json({success: true, message: 'Successfully edited face images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
