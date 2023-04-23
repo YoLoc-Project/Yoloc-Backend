@@ -11,12 +11,13 @@ midwareFunctions.lowercaseEmail = function(req, res, next){
 
 midwareFunctions.checkToken = function(req, res, next){
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      // the incoming token is 'Bearer #token#'
-      var token = req.headers.authorization.split(' ')[1];
-      // we need to convert the string to JSON object first.
-      // var stringToken = JSON.parse(token)['token'];
-      var decodedtoken = jwt.decode(token, dotenv.SECRET_KEYWORD);
-      User.findOne(
+    // the incoming token is 'Bearer #token#'
+    var token = req.headers.authorization.split(' ')[1];
+    // we need to convert the string to JSON object first.
+    // var stringToken = JSON.parse(token)['token'];
+    if (!token) return res.status(401).json({success: false, message: 'Invalid token.'});
+    var decodedtoken = jwt.decode(token, dotenv.SECRET_KEYWORD);
+    User.findOne(
         {
           $and: [
                  { _id :decodedtoken._id },
