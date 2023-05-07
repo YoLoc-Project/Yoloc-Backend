@@ -42,6 +42,7 @@ router.post('/trainmodel', function(req, res) {
 
   // var user = FUNC.getUser(req);
   // เลือกของ pee ไปใช้ก่อน
+  // In real work environment I shouldn't do this, as it is rather vulnerable.
     User.findById('6440eb66227584984f75e9ba').exec((err, foundUser) => {
         if (err) return res.status(401).json({success: false, message: err});
 
@@ -68,8 +69,10 @@ router.post('/trainmodel', function(req, res) {
           json: JSON.stringify(payload)
         };
       
+        
         // Placeholder slot for updating database
         // TODO Get all firebase image urls
+        
       
           request(options, function (error, response, body) {
             console.error('error:', error);
