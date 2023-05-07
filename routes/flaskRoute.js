@@ -40,38 +40,50 @@ router.get('/test', function(req, res) {
 router.post('/trainmodel', function(req, res) {
   console.log("train model");
 
-  const example = {
-    images: [
-      {
-        url: 'example.com',
-        email: 'example@email.com',
-        name: 'Name'
-      },
-      {
-        url: 'example2.com',
-        email: 'example2@email.com',
-        name: 'Name2'
-      },
-    ],
-  }
+  // var user = FUNC.getUser(req);
+  // เลือกของ pee ไปใช้ก่อน
+    User.findById('6440eb66227584984f75e9ba').exec((err, foundUser) => {
+        if (err) return res.status(401).json({success: false, message: err});
 
-  const options = {
-    uri: 'http://127.0.0.1:5000/flask/trainmodel',
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    json: JSON.stringify(example)
-  };
-
-  // Placeholder slot for updating database
-  // TODO Get all firebase image urls
-
-    request(options, function (error, response, body) {
-      console.error('error:', error);
-      console.log('statusCode:', response && response.statusCode);
-      console.log('body:', body);
-      res.send(body);
-    }); 
-   return false;    
+        var userObject = {
+            email: foundUser.email,
+            name: foundUser.name,
+            nickname: foundUser.nickname,
+            phone: foundUser.phone,
+            birthdate: foundUser.birthdate,
+            gender: foundUser.gender,
+            faceImgs: foundUser.faceImgs,
+        }
+        const payload = {
+          email: foundUser.email,
+          name: foundUser.name,
+          nickname: foundUser.nickname,
+          faceImgs: foundUser.faceImgs,
+        }
+      
+        const options = {
+          uri: 'http://127.0.0.1:5000/flask/trainmodel',
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          json: JSON.stringify(payload)
+        };
+      
+        // Placeholder slot for updating database
+        // TODO Get all firebase image urls
+      
+          request(options, function (error, response, body) {
+            console.error('error:', error);
+            console.log('statusCode:', response && response.statusCode);
+            console.log('body:', body);
+            if (response === undefined || response.statusCode !== 200) {
+              return res.status(500).json({success: false, message: 'Flask server error', user: userObject});
+            } else {
+              return res.status(200).json({success: true, message: 'Image url sending success', user: userObject});
+            }
+          });  
+        
+    });
+  
 });
 
 module.exports = router;
