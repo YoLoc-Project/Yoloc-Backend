@@ -5,7 +5,6 @@ const MID = require('../middlewares');
 const FUNC = require('../functions');
 const fetch = require('cross-fetch');
 const request = require('request');
-const dotenv = require('dotenv').config().parsed;
 const ioreq = require("socket.io-request");
 // const io = require("socket.io")();
 

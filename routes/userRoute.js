@@ -3,7 +3,6 @@ const User = require('../models/userModel');
 const jwt = require('jwt-simple');
 const passport = require('passport');
 const MID = require('../middlewares');
-const dotenv = require('dotenv').config().parsed;
 
 const router = express.Router();
 
@@ -30,7 +29,7 @@ router.post('/signup', MID.lowercaseEmail, (req,res) => {
                     } 
                     // console.log("Register successful.");
                     res.locals.currentUser = user;
-                    var token = jwt.encode(user, dotenv.SECRET_KEYWORD);
+                    var token = jwt.encode(user, process.env.SECRET_KEYWORD);
 
                     return res.status(200).json({"token" : token});
                     })
@@ -51,7 +50,7 @@ router.post('/signin', MID.lowercaseEmail, (req,res,next) => {
             req.login(user, function(err) {
                 if (err) return next(err);
                 // console.log("Login successful.");
-                var token = jwt.encode(user, dotenv.SECRET_KEYWORD);
+                var token = jwt.encode(user, process.env.SECRET_KEYWORD);
                 User.findByIdAndUpdate(user._id, { token: token }, function(err, updatedUser) {
                     if (err) return console.log(err)
                     if (updatedUser) {

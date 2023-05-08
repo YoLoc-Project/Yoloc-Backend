@@ -4,7 +4,6 @@ const jwt = require('jwt-simple');
 const passport = require('passport');
 const MID = require('../middlewares');
 const FUNC = require('../functions');
-const dotenv = require('dotenv').config().parsed;
 
 const router = express.Router();
 

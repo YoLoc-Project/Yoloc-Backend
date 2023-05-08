@@ -3,8 +3,6 @@ const User = require('../models/userModel');
 const jwt = require('jwt-simple');
 const MID = require('../middlewares');
 const FUNC = require('../functions');
-const dotenv = require('dotenv').config().parsed;
-FUNC
 
 const router = express.Router();
 

@@ -1,6 +1,5 @@
 const jwt = require('jwt-simple');
 const User = require('../models/userModel');
-const dotenv = require('dotenv').config().parsed;
 
 var midwareFunctions = {};
 
@@ -16,7 +15,7 @@ midwareFunctions.checkToken = function(req, res, next){
     // we need to convert the string to JSON object first.
     // var stringToken = JSON.parse(token)['token'];
     if (!token) return res.status(401).json({success: false, message: 'Invalid token.'});
-    var decodedtoken = jwt.decode(token, dotenv.SECRET_KEYWORD);
+    var decodedtoken = jwt.decode(token, process.env.SECRET_KEYWORD);
     User.findOne(
         {
           $and: [
