@@ -27,10 +27,10 @@ router.post('/addimage', MID.checkToken, (req,res) => {
         if (updatedUser) {
             // Train the model inside flask server
             const payload = {
-                email: foundUser.email,
-                name: foundUser.name,
-                nickname: foundUser.nickname,
-                faceImgs: foundUser.faceImgs,
+                email: updatedUser.email,
+                name: updatedUser.name,
+                nickname: updatedUser.nickname,
+                faceImgs: updatedUser.faceImgs,
               }
             const options = {
                 uri: 'http://127.0.0.1:5000/flask/trainmodel',
@@ -77,10 +77,10 @@ router.post('/editimage', MID.checkToken, (req,res) => {
             // So far this system does not remove existing images inside Firebase
             // but it does replace existing images inside python server
             const payload = {
-                email: foundUser.email,
-                name: foundUser.name,
-                nickname: foundUser.nickname,
-                faceImgs: foundUser.faceImgs,
+                email: updatedUser.email,
+                name: updatedUser.name,
+                nickname: updatedUser.nickname,
+                faceImgs: updatedUser.faceImgs,
               }
             const options = {
                 uri: 'http://127.0.0.1:5000/flask/trainmodel',
