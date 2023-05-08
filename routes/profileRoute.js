@@ -4,6 +4,7 @@ const jwt = require('jwt-simple');
 const MID = require('../middlewares');
 const FUNC = require('../functions');
 const dotenv = require('dotenv').config().parsed;
+FUNC
 
 const router = express.Router();
 
@@ -38,16 +39,21 @@ router.post('/addimage', MID.checkToken, (req,res) => {
                 json: JSON.stringify(payload)
             };
 
-            request(options, function (error, response, body) {
-                console.error('error:', error);
-                console.log('statusCode:', response && response.statusCode);
-                console.log('body:', body);
-                if (response === undefined || response.statusCode !== 200) {
-                  return res.status(500).json({success: false, message: 'Flask server error'});
-                } else {
-                  return res.status(200).json({success: true, message: 'Successfully added profile and images'});
-                }
-            });  
+            var io = req.app.get('socketio');
+            io.emit("trainmodel", options);
+            return res.status(200).json({success: true, message: 'Image saved into database. Awaiting the Pi system to train (if there\'s one online).'});
+      
+
+            // request(options, function (error, response, body) {
+            //     console.error('error:', error);
+            //     console.log('statusCode:', response && response.statusCode);
+            //     console.log('body:', body);
+            //     if (response === undefined || response.statusCode !== 200) {
+            //         return res.status(400).json({success: false, message: 'Python client error'});
+            //     } else {
+            //         return res.status(200).json({success: true, message: 'Successfully added profile and images'});
+            //     }
+            // });  
 
             // return res.status(200).json({success: true, message: 'Successfully added profile and images'});
         } else {
@@ -83,16 +89,21 @@ router.post('/editimage', MID.checkToken, (req,res) => {
                 json: JSON.stringify(payload)
             };
 
-            request(options, function (error, response, body) {
-                console.error('error:', error);
-                console.log('statusCode:', response && response.statusCode);
-                console.log('body:', body);
-                if (response === undefined || response.statusCode !== 200) {
-                  return res.status(500).json({success: false, message: 'Flask server error'});
-                } else {
-                  return res.status(200).json({success: true, message: 'Successfully edited profile and images'});
-                }
-            });
+            var io = req.app.get('socketio');
+            io.emit("trainmodel", options);
+            return res.status(200).json({success: true, message: 'Image saved into database. Awaiting the Pi system to train (if there\'s one online).'});
+      
+
+            // request(options, function (error, response, body) {
+            //     console.error('error:', error);
+            //     console.log('statusCode:', response && response.statusCode);
+            //     console.log('body:', body);
+            //     if (response === undefined || response.statusCode !== 200) {
+            //         return res.status(400).json({success: false, message: 'Python client error'});
+            //     } else {
+            //         return res.status(200).json({success: true, message: 'Successfully edited profile and images'});
+            //     }
+            // });
             // return res.status(200).json({success: true, message: 'Successfully edited face images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});

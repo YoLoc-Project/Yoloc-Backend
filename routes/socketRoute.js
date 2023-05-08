@@ -6,36 +6,23 @@ const FUNC = require('../functions');
 const fetch = require('cross-fetch');
 const request = require('request');
 const dotenv = require('dotenv').config().parsed;
+const ioreq = require("socket.io-request");
+// const io = require("socket.io")();
 
 const router = express.Router();
-
-router.get('/getme', function(req, res) {
-    res.status(200).send({
-      example: "true"
-    });
-
-});
 
 router.get('/test', function(req, res) {
 
   console.log("test");
-    request.get('http://127.0.0.1:5000/flask/test', function (error, response, body) {
-        console.error('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-        console.log('body:', body);
-        res.send(body);
-      });  
-      
+  var io = req.app.get('socketio');
+  io.emit("test", {data: 'data'});
+  return res.status(200).json({success: true, message: 'success'});
+
+//  io.emit("test", {data: 'data'}, (data2, data3) => {
+//     console.log(data2);
+//   });
+
 });
-
-// router.post('/test', function(req, res) {
-//   fetch('http://127.0.0.1:5000/flask/test', {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json'},
-//     body: JSON.stringify({target: 'one'})
-// });
-// });
-
 
 router.post('/trainmodel', function(req, res) {
   console.log("train model");
@@ -58,17 +45,21 @@ router.post('/trainmodel', function(req, res) {
           headers: {'Content-Type': 'application/json'},
           json: JSON.stringify(payload)
         };
+
+          var io = req.app.get('socketio');
+          io.emit("trainmodel", options);
+          return res.status(200).json({success: true, message: 'Image saved into database. Awaiting the Pi system to train (if there\'s one online).'});
       
-          request(options, function (error, response, body) {
-            console.error('error:', error);
-            console.log('statusCode:', response && response.statusCode);
-            console.log('body:', body);
-            if (response === undefined || response.statusCode !== 200) {
-              return res.status(500).json({success: false, message: 'Flask server error'});
-            } else {
-              return res.status(200).json({success: true, message: 'Image url sending success'});
-            }
-          });  
+          // request(options, function (error, response, body) {
+          //   console.error('error:', error);
+          //   console.log('statusCode:', response && response.statusCode);
+          //   console.log('body:', body);
+          //   if (response === undefined || response.statusCode !== 200) {
+          //     return res.status(400).json({success: false, message: 'Python client error'});
+          //   } else {
+          //     return res.status(200).json({success: true, message: 'Image url sending success'});
+          //   }
+          // });  
         
     });
   

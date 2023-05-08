@@ -13,7 +13,7 @@ const User = require('./models/userModel');
 const dotenv = require('dotenv').config().parsed;
 // console.log(dotenv);
 
-// ---- [FLASK SOCKETIO CONNECTION TEST] ----
+// ---- [SOCKETIO CONNECTION] ----
 const http = require('http');
 const server = http.createServer(app);
 const { SocketServer } = require("socket.io");
@@ -62,7 +62,7 @@ app.use(async function(req,res,next){
 app.use('/user', require('./routes/userRoute'));
 app.use('/profile', require('./routes/profileRoute'));
 app.use('/token', require('./routes/tokenRoute'));
-app.use('/flask', require('./routes/flaskRoute'));
+app.use('/socket', require('./routes/socketRoute'));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -74,36 +74,31 @@ app.use(function(req,res,next) {
   next();
 });
 
-// app.listen(port, () => {
-//     console.log('port running on port : ' + port);
-// });
-
-// ---- [FLASK SOCKETIO CONNECTION TEST] ----
-// const http = require('http');
-// const server = http.createServer(app);
-// const { Server } = require("socket.io");
-// const io = new Server(server);
+var io = require('socket.io')(server);
 
 server.listen(port, () => {
   console.log('server listening on port : ' + port);
 });
 
-var io = require('socket.io')(server);
-
-// io.listen(ioport, () => {
-//   console.log('Socket.IO listening on port : ' + ioport);
+// io.listen(port, () => {
+//   console.log('Socket.IO listening on port : ' + port);
 // });
 
 io.on('connection', (socket) => {
-  console.log('io connected');
+  console.log('face recognition client connected');
 
   socket.on("disconnect", ()=> {
-    console.log('io disconnected');
+    console.log('face recognition client disconnected');
   })
 
-  socket.on('test message', function(msg) {
-    console.log('msg: ' + msg);
-    io.emit('msg back', msg);
+  socket.on('client_success', function(data) {
+    console.log('client msg: ' + data.message);
+  });
+
+  socket.on('client_error', function(data) {
+    console.log('client error msg: ' + data.message);
   });
 });
+
+app.set('socketio', io);
 app.io = io;
