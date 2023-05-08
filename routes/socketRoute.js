@@ -11,6 +11,17 @@ const ioreq = require("socket.io-request");
 
 const router = express.Router();
 
+router.get('/online', function(req, res) {
+
+  console.log("online");
+  return res.status(200).json({success: true, message: 'online'});
+
+//  io.emit("test", {data: 'data'}, (data2, data3) => {
+//     console.log(data2);
+//   });
+
+});
+
 router.get('/test', function(req, res) {
 
   console.log("test");
