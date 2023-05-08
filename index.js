@@ -18,7 +18,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { SocketServer } = require("socket.io");
 
-const mongoAtlasUrl = dotenv.MONGODB_URL;
+const mongoAtlasUrl = process.env.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
 
 app.use(cors())
@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use(require('express-session')({
-  secret: dotenv.SECRET_KEYWORD,
+  secret: process.env.SECRET_KEYWORD,
   resave: false,
   saveUninitialized: false
 }));
