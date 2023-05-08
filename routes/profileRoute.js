@@ -24,8 +24,32 @@ router.post('/addimage', MID.checkToken, (req,res) => {
          function(err, updatedUser) {
         if (err) return console.log(err)
         if (updatedUser) {
-            // TODO paste the flaskRoute /trainmodel code
-            return res.status(200).json({success: true, message: 'Successfully added profile and images'});
+            // Train the model inside flask server
+            const payload = {
+                email: foundUser.email,
+                name: foundUser.name,
+                nickname: foundUser.nickname,
+                faceImgs: foundUser.faceImgs,
+              }
+            const options = {
+                uri: 'http://127.0.0.1:5000/flask/trainmodel',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                json: JSON.stringify(payload)
+            };
+
+            request(options, function (error, response, body) {
+                console.error('error:', error);
+                console.log('statusCode:', response && response.statusCode);
+                console.log('body:', body);
+                if (response === undefined || response.statusCode !== 200) {
+                  return res.status(500).json({success: false, message: 'Flask server error'});
+                } else {
+                  return res.status(200).json({success: true, message: 'Successfully added profile and images'});
+                }
+            });  
+
+            // return res.status(200).json({success: true, message: 'Successfully added profile and images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
         }
@@ -43,8 +67,33 @@ router.post('/editimage', MID.checkToken, (req,res) => {
          function(err, updatedUser) {
         if (err) return console.log(err)
         if (updatedUser) {
-            // TODO paste the flaskRoute /trainmodel code
-            return res.status(200).json({success: true, message: 'Successfully edited face images'});
+            // Train the model inside flask server
+            // So far this system does not remove existing images inside Firebase
+            // but it does replace existing images inside python server
+            const payload = {
+                email: foundUser.email,
+                name: foundUser.name,
+                nickname: foundUser.nickname,
+                faceImgs: foundUser.faceImgs,
+              }
+            const options = {
+                uri: 'http://127.0.0.1:5000/flask/trainmodel',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                json: JSON.stringify(payload)
+            };
+
+            request(options, function (error, response, body) {
+                console.error('error:', error);
+                console.log('statusCode:', response && response.statusCode);
+                console.log('body:', body);
+                if (response === undefined || response.statusCode !== 200) {
+                  return res.status(500).json({success: false, message: 'Flask server error'});
+                } else {
+                  return res.status(200).json({success: true, message: 'Successfully edited profile and images'});
+                }
+            });
+            // return res.status(200).json({success: true, message: 'Successfully edited face images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
         }
