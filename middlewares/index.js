@@ -14,7 +14,7 @@ midwareFunctions.checkToken = function(req, res, next){
     var token = req.headers.authorization.split(' ')[1];
     // we need to convert the string to JSON object first.
     // var stringToken = JSON.parse(token)['token'];
-    if (!token) return res.status(401).json({success: false, message: 'Invalid token.'});
+    if (!token || token == null || token == "null") return res.status(401).json({success: false, message: 'Invalid token.'});
     var decodedtoken = jwt.decode(token, process.env.SECRET_KEYWORD);
     User.findOne(
         {
