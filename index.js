@@ -16,14 +16,20 @@ const dotenv = require('dotenv').config().parsed;
 // ---- [SOCKETIO CONNECTION] ----
 const http = require('http');
 const server = http.createServer(app);
-const { SocketServer } = require("socket.io");
+// const { SocketServer } = require("socket.io");
 
 const mongoAtlasUrl = process.env.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
 
-app.use(cors())
-app.use(bodyParser.urlencoded({extended:true}))
-app.use(bodyParser.json())
+var corsOptions = {
+  origin: '*',
+  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  credentials: true
+};
+
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 app.use((err, req, res, next) => {
   var statusCode = err.status || 500
@@ -41,6 +47,7 @@ app.use(require('express-session')({
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,22 +74,25 @@ app.use('/socket', require('./routes/socketRoute'));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(cors(corsOptions))
+app.options('*', cors())
+
 app.use(function(req,res,next) {
   res.locals.currentUser = req.user;
   res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Credentials', true)
   next();
 });
 
-var io = require('socket.io')(server);
+
 
 server.listen(port, () => {
   console.log('server listening on port : ' + port);
 });
 
-// io.listen(port, () => {
-//   console.log('Socket.IO listening on port : ' + port);
-// });
+var io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
   console.log('face recognition client connected');

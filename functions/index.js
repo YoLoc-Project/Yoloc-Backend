@@ -3,7 +3,6 @@ const User = require('../models/userModel');
 
 var functions = {};
 
-// Not really midware
 functions.getUser = function(req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 
