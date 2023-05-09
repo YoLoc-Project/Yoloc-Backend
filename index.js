@@ -22,14 +22,28 @@ const mongoAtlasUrl = process.env.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
 
 var corsOptions = {
-  origin: '*',
+  origin: true,
   methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  "preflightContinue": true,
   credentials: true
 };
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.options('*', cors())
+app.use(cors(corsOptions))
+
+app.use(function(req,res,next) {
+  res.locals.currentUser = req.user;
+  // res.header("X-Frame-Options", "ALLOWALL");
+  // res.header('Access-Control-Allow-Origin', '*');
+  // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  // res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  // res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.use((err, req, res, next) => {
   var statusCode = err.status || 500
@@ -73,20 +87,6 @@ app.use('/socket', require('./routes/socketRoute'));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-app.use(cors(corsOptions))
-app.options('*', cors())
-
-app.use(function(req,res,next) {
-  res.locals.currentUser = req.user;
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-  res.header('Access-Control-Allow-Credentials', true)
-  next();
-});
-
-
 
 server.listen(port, () => {
   console.log('server listening on port : ' + port);
