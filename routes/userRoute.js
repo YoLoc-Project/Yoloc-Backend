@@ -29,7 +29,7 @@ router.post('/signup', MID.lowercaseEmail, (req,res) => {
                     } 
                     // console.log("Register successful.");
                     res.locals.currentUser = user;
-                    var token = jwt.encode(user, process.env.SECRET_KEYWORD);
+                    var token = jwt.encode({id: user._id, email: user.email, name: user.name}, process.env.SECRET_KEYWORD);
 
                     return res.status(200).json({"token" : token});
                     })
@@ -50,7 +50,7 @@ router.post('/signin', MID.lowercaseEmail, (req,res,next) => {
             req.login(user, function(err) {
                 if (err) return next(err);
                 // console.log("Login successful.");
-                var token = jwt.encode(user, process.env.SECRET_KEYWORD);
+                var token = jwt.encode({id: user._id, email: user.email, name: user.name}, process.env.SECRET_KEYWORD);
                 User.findByIdAndUpdate(user._id, { token: token }, function(err, updatedUser) {
                     if (err) return console.log(err)
                     if (updatedUser) {
@@ -78,8 +78,8 @@ router.post('/signin', MID.lowercaseEmail, (req,res,next) => {
     })(req, res, next)
 })
 
-router.post('/signout', MID.checkToken, (req,res) => {
-    var user = FUNC.getUser(req);
+router.post('/signout', MID.checkTokenBody, (req,res) => {
+    var user = FUNC.getUserBody(req);
     User.findByIdAndUpdate(user._id, { token: "" }, function(err, updatedUser) {
         if (err) return console.log(err)
         if (updatedUser) {

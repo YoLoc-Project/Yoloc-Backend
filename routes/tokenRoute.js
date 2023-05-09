@@ -12,9 +12,9 @@ router.get('/test', (req,res) => {
     return res.json({success: true, message: 'Hello world.'});
 })
 
-router.get('/auth', MID.checkToken, (req,res) => {
-    var user = FUNC.getUser(req);
-    User.findById(user._id).exec((err, foundUser) => {
+router.get('/auth/:authorization', MID.checkTokenParams, (req,res) => {
+    var user = FUNC.getUserParams(req.params.authorization);
+    User.findById(user.id).exec((err, foundUser) => {
         if (err) return res.status(401).json({success: false, message: 'Error'});
 
         var userObject = {

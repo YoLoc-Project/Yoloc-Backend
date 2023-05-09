@@ -22,22 +22,22 @@ const mongoAtlasUrl = process.env.MONGODB_URL;
 mongoose.connect(mongoAtlasUrl);
 
 var corsOptions = {
-  origin: true,
+  origin: '*',
+  // credentials: true,
   methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-  "preflightContinue": true,
-  credentials: true
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+  preflightContinue: false,
 };
 
-app.options('*', cors())
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+app.options('*', cors());
 
 app.use(function(req,res,next) {
   res.locals.currentUser = req.user;
-  // res.header("X-Frame-Options", "ALLOWALL");
-  // res.header('Access-Control-Allow-Origin', '*');
-  // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  // res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.header("X-Frame-Options", "ALLOWALL");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   // res.header('Access-Control-Allow-Credentials', true);
   next();
 });

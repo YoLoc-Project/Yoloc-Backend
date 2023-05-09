@@ -7,10 +7,10 @@ const FUNC = require('../functions');
 const router = express.Router();
 
 // add image list along with profile
-router.post('/addimage', MID.checkToken, (req,res) => {
-    var user = FUNC.getUser(req);
+router.post('/addimage', MID.checkTokenBody, (req,res) => {
+    var user = FUNC.getUserBody(req);
     User.findByIdAndUpdate(
-        user._id,
+        user.id,
          { 
             email: req.body.email,
             name: req.body.name,
@@ -59,10 +59,10 @@ router.post('/addimage', MID.checkToken, (req,res) => {
 })
 
 // edit face image list
-router.post('/editimage', MID.checkToken, (req,res) => {
-    var user = FUNC.getUser(req);
+router.post('/editimage', MID.checkTokenBody, (req,res) => {
+    var user = FUNC.getUserBody(req);
     User.findByIdAndUpdate(
-        user._id,
+        user.id,
          { 
             faceImgs: req.body.faceImgs,
          }, 
@@ -105,10 +105,12 @@ router.post('/editimage', MID.checkToken, (req,res) => {
 })
 
 // edit profile without image
-router.post('/editprofile', MID.checkToken, (req,res) => {
-    var user = FUNC.getUser(req);
+router.post('/editprofile', MID.checkTokenBody, (req,res) => {
+    var user = FUNC.getUserBody(req);
+    console.log(user);
+    console.log(user.id);
     User.findByIdAndUpdate(
-        user._id,
+        user.id,
          { 
             email: req.body.email,
             name: req.body.name,
