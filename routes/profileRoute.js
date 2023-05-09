@@ -55,6 +55,7 @@ router.post('/addimage', MID.checkToken, (req,res) => {
 
             // return res.status(200).json({success: true, message: 'Successfully added profile and images'});
         } else {
+            console.log('User not found while attempting to update')
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
         }
     })
