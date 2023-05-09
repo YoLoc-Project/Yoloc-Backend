@@ -31,9 +31,6 @@ router.post('/addimage', MID.checkToken, (req,res) => {
                 faceImgs: updatedUser.faceImgs,
               }
             const options = {
-                uri: 'http://127.0.0.1:5000/flask/trainmodel',
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 json: JSON.stringify(payload)
             };
 
@@ -82,9 +79,6 @@ router.post('/editimage', MID.checkToken, (req,res) => {
                 faceImgs: updatedUser.faceImgs,
               }
             const options = {
-                uri: 'http://127.0.0.1:5000/flask/trainmodel',
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 json: JSON.stringify(payload)
             };
 
