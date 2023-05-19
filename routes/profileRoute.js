@@ -25,11 +25,11 @@ router.post('/addimage', MID.checkTokenBody, (req,res) => {
         if (updatedUser) {
             // Train the model inside flask server
             const payload = {
-                email: updatedUser.email,
-                name: updatedUser.name,
-                nickname: updatedUser.nickname,
-                faceImgs: updatedUser.faceImgs,
-              }
+                email: req.body.email,
+                name: req.body.name,
+                nickname: req.body.nickname,
+                faceImgs: req.body.faceImgs,
+            }
             const options = {
                 json: JSON.stringify(payload)
             };
@@ -37,18 +37,6 @@ router.post('/addimage', MID.checkTokenBody, (req,res) => {
             var io = req.app.get('socketio');
             io.emit("trainmodel", options);
             return res.status(200).json({success: true, message: 'Image saved into database. Awaiting the Pi system to train (if there\'s one online).'});
-      
-
-            // request(options, function (error, response, body) {
-            //     console.error('error:', error);
-            //     console.log('statusCode:', response && response.statusCode);
-            //     console.log('body:', body);
-            //     if (response === undefined || response.statusCode !== 200) {
-            //         return res.status(400).json({success: false, message: 'Python client error'});
-            //     } else {
-            //         return res.status(200).json({success: true, message: 'Successfully added profile and images'});
-            //     }
-            // });  
 
             // return res.status(200).json({success: true, message: 'Successfully added profile and images'});
         } else {
@@ -73,11 +61,11 @@ router.post('/editimage', MID.checkTokenBody, (req,res) => {
             // So far this system does not remove existing images inside Firebase
             // but it does replace existing images inside python server
             const payload = {
-                email: updatedUser.email,
-                name: updatedUser.name,
-                nickname: updatedUser.nickname,
-                faceImgs: updatedUser.faceImgs,
-              }
+                email: req.body.email,
+                name: req.body.name,
+                nickname: req.body.nickname,
+                faceImgs: req.body.faceImgs,
+            }
             const options = {
                 json: JSON.stringify(payload)
             };
@@ -86,18 +74,6 @@ router.post('/editimage', MID.checkTokenBody, (req,res) => {
             io.emit("trainmodel", options);
             return res.status(200).json({success: true, message: 'Image saved into database. Awaiting the Pi system to train (if there\'s one online).'});
       
-
-            // request(options, function (error, response, body) {
-            //     console.error('error:', error);
-            //     console.log('statusCode:', response && response.statusCode);
-            //     console.log('body:', body);
-            //     if (response === undefined || response.statusCode !== 200) {
-            //         return res.status(400).json({success: false, message: 'Python client error'});
-            //     } else {
-            //         return res.status(200).json({success: true, message: 'Successfully edited profile and images'});
-            //     }
-            // });
-            // return res.status(200).json({success: true, message: 'Successfully edited face images'});
         } else {
             return res.status(404).json({success: false, message: 'User not found while attempting to update'});
         }
